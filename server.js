@@ -4,6 +4,7 @@ const cors = require('cors')
 const PORT = process.env.PORT || 3001;
 const app = express();
 const middleware = require('./middleware')
+const AuthRouter = require('./routes/AuthRouter')
 
 /////////// MIDDLEWARE //////////
 app.use(cors())
@@ -17,7 +18,12 @@ const controllerA = require('./controllers/AuthController')
 
 
 //////////// ROUTES ////////////////
+app.get('/session',
+middleware.stripToken,
+middleware.verifyToken,
+controllerA.CheckSession)
 
+app.use('/auth', AuthRouter)
 
 app.get('/users', controllerS.GetAllUsers)
 app.get('/posts', controllerS.GetAllPosts)
